@@ -48,9 +48,9 @@ class Views
 
 		$file = $this->getPath() . $view;
 
-		if(is_readable($file)){
+		if (is_readable($file)){
 			require $file;
-		}else{
+		} else{
 			throw new \Exception("{$file} not found");
 		}
 	}
@@ -68,74 +68,107 @@ class Views
 	public static function getPath($dir = null)
 	{
 		$view = new Views();
-		if($dir === null){
+		if ($dir === null) {
 			$path = $view->createPath('App/Views/');
-		}else {
+		} else {
 			$path = $view->createPath($dir);			
 		}
 		return $path;
 	}
+    
+    /**
+	 *
+	 * Set the appropriate url path for client-side dependencies
+	 *
+	 * @param bool $scheme 
+	 *
+	 * @return string $scheme . $hostPath The appropriate URL
+	 *
+	 */
+    
+    public function setPath($scheme)
+    {
+        if (!is_bool($scheme)) {
+            throw new \Exception("{$http}: value does not exist");
+        }        
+        $hostPath = $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];        
+        if ($scheme === true) {
+            return 'http://'. $hostPath;
+        } else {
+            return 'https://' . $hostPath;
+        }
+    }
 
 	/**
 	 *
 	 * get the URL's for the client-side dependencies
 	 *
-	 * @param bool $http
-	 * @param string $path
+	 * @param bool $scheme
+	 * @param string $content The nature of the dependencies required (.css, .js, .jpg, .ttf)
 	 *
-	 * @return string $url
+	 * @return string $url Path to the desired dependency
 	 *
 	 */
 
-	public static function returnURL($http, $path)
+	public static function returnURL($scheme, $content)
 	{
-		if(!is_bool($http)){
-			echo "{$http} value does not exist";
-		}else {
-			if($http === true){
-				$http_val = htmlspecialchars('http://');
-			}else {
-				$http_val = htmlspecialchars('https://');
-			}
-			switch($path){
-				case 'font':
-					$url = str_replace(substr(self::getPath(), 0, 15), $http_val . $_SERVER['SERVER_NAME'], self::getPath('public/fonts/'));
-					break;
-
-				case 'style':
-					$url = str_replace(substr(self::getPath(), 0, 15), $http_val . $_SERVER['SERVER_NAME'], self::getPath('public/styles/'));
-					break;
-
-				case 'img':
-					$url = str_replace(substr(self::getPath(), 0, 15), $http_val . $_SERVER['SERVER_NAME'], self::getPath('public/img/'));
-					break;
-
-				case 'js':
-					$url = 	str_replace(substr(self::getPath(), 0, 15), $http_val . $_SERVER['SERVER_NAME'], self::getPath('public/js/'));	
-					break;
-			}		
-			return $url;	
-		}		
+        $views = new Views;
+        switch ($content) {
+            case 'font':
+                $url = $views->setPath($scheme) . '/fonts/';
+                break;
+                
+            case 'style':
+                $url = $views->setPath($scheme) . '/styles/';
+                break;
+                
+            case 'img':
+                $url = $views->setPath($scheme) . '/img/';
+                break;
+                
+            case 'js':
+                $url = $views->setPath($scheme) . '/js/';
+                break;
+                
+            default:
+                throw new \Exception("{$path} does not exist");
+                break;
+        }
+        return $url;
 	}
 
 	/**
 	 *
-	 * Use default view rendering dependencies (.js, .css, .php)
+	 * Use default view rendering dependencies(.js, .css, .php) for Mustache templates
 	 *
 	 * @return array  Default client-side dependencies
 	 *
 	 */
-
-	public static function renderDefaults()
+    
+    public function renderMustacheDefaults($scheme, $title = null)
+    {
+        return [
+            'title' => !is_null($title) ? $title : 'Bingo Framework',
+            'stylesheet' => $this->setPath($scheme) . '/styles/main.css',
+            'font' => $this->setPath($scheme) . '/fonts/Ubuntu.css'
+        ];
+    }
+    
+    /**
+	 *
+	 * Use default view rendering dependencies(.js, .css, .php) for Raw PHP templates
+	 *
+	 * @return array  Default client-side dependencies
+	 *
+	 */
+    
+    public function renderRawDefaults($scheme, $title = null)
 	{
-		return [
-			'header' => self::sanitize('template/header.php'),
-			'footer' => self::sanitize('template/footer.php'),
-			'stylesheet' => self::sanitize('http://localhost/template/style.css'),
-			'js' => self::sanitize('http://localhost/template/main.js'),
-			'font' => self::sanitize('http://localhost/template/font.css')
-		];
-	}
+		return array_merge([
+            'header' => $this->createPath('App/Views/Raw/base_header.php'),
+            'footer' => $this->createPath('App/Views/Raw/base_footer.php')
+        ], $this->renderMustacheDefaults($scheme, $title));        
+	}    
 
 	/**
  	 *
@@ -154,9 +187,9 @@ class Views
 	{
 		switch($input){
 			case is_string($input):
-				if(preg_match('/(?:http|https)?(?:\:\/\/)?(?:www.)?(([A-Za-z0-9-]+\.)*[A-Za-z0-9-]+\.[A-Za-z]+)(?:\/.*)?/im', $input)){
+				if (preg_match('/(?:http|https)?(?:\:\/\/)?(?:www.)?(([A-Za-z0-9-]+\.)*[A-Za-z0-9-]+\.[A-Za-z]+)(?:\/.*)?/im', $input)){
 					$data = filter_var($input, FILTER_SANITIZE_URL);
-				}else {
+				} else {
 					$data = htmlspecialchars(filter_var($input, FILTER_SANITIZE_STRING));
 				}			
 				break;
@@ -172,9 +205,9 @@ class Views
 	public function filter($text)
 	{
 		$sanitized = [];
-		if(!is_array($text)){
+		if (!is_array($text)){
 			throw new Exception("Please provide an array of strings");
-		}else {
+		} else {
 			for($x=0; $x<=count($text)-1; $x++){
 				$sanitized[] = [self::sanitize($text[$x])];
 			}
@@ -200,6 +233,7 @@ class Views
 		$options = ['extension' => '.html'];
 		$mustache = new \Mustache_Engine([
 			'loader' => new \Mustache_Loader_FilesystemLoader(dirname(__DIR__) . '/App/Views/Mustache', $options),
+			'cache' => $this->createPath(Config::CACHE_DIR . '/mustache'),
 			'escape' => function ($value){
 				return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 			}
@@ -207,4 +241,90 @@ class Views
 		$tmp = $mustache->loadTemplate($template);
 		return $tmp->render($values);
 	}
+    
+    /**
+  	 * 
+  	 * Compile LESS files and cache them
+  	 *
+  	 * @param string $input Input LESS file in the styles directory
+  	 * @param string $output Name of the output LESS file
+     * @param array $variables A PHP array of LESS variables
+     * @param bool $comments A flag to determine whether or not to include comments in the output CSS file
+     * 
+     * @see http://leafo.net/lessphp/
+     * @see http://lesscss.org/
+  	 *
+  	 * @return $this->createPath("public/styles/{$input}.css") The compiled CSS file
+  	 *
+	 */
+
+	public function autoCompileLess($input, $output, $comments = true, $variables = null)
+	{
+		$vendor = new Vendor();
+		$vendor->loadPackage();
+		$cacheFile = $this->createPath(Config::CACHE_DIR . "/less/{$input}.cache"); //file to be cached
+		if (file_exists($cacheFile)) {
+			$cache = unserialize(file_get_contents($cacheFile));
+		} else {
+			$cache = $this->createPath("public/styles/{$input}.less");
+		}
+		$less = new \lessc;
+        if ($comments !== true && is_bool($comments)) {
+            $less->setPreserveComments(false);
+        }
+        
+        $less->setPreserveComments(true);        
+        $newCache = $less->cachedCompile($cache);
+    
+		if (!is_null($variables)) {
+			if (is_array($variables)) {
+				$less->setVariables($variables);
+			} else {
+				throw new \Exception("Invalid LESS variables");
+			} 
+		}
+
+		if (!is_array($cache) || $newCache["updated"] > $cache["updated"]) {
+			file_put_contents($cacheFile, serialize($newCache));
+			file_put_contents($this->createPath("public/styles/{$input}.css"), $newCache["compiled"]);
+		}
+        
+        if (file_exists($this->createPath("public/styles/{$output}.css"))) {
+            return $output . '.css';
+        }
+	}
+    
+    /**
+     * 
+     * Create markup from markdown
+     *
+     * @param string $markdown The string containing the markup you intend to convert
+     * @param array $options An array of transformation options
+     *
+     * @see https://michelf.ca/projects/php-markdown/configuration/
+     *
+     * @return $parser->transform($markdown) The desired markup
+     *
+     */
+    
+    public function transformMarkdown($markdown, $options = null)
+    {
+        $vendor = new Vendor();
+        $vendor->loadPackage();
+        $parser = new \Michelf\Markdown;
+        $parser->no_markup = false;        
+        if (!is_null($options) && is_array($options)) {
+            $match = function ($key, $array) {
+                if (array_key_exists($key, $array)) {
+                    return $array[$key];
+                }
+            };
+            if (isset($options['urls']) && is_array($options['urls'])) {
+                $parser->predef_urls = $options['urls'];
+            }
+            $parser->tab_width = $match('tab_width', $options);
+            $parser->empty_element_suffix = $match('suffix', $options);
+        }
+        return $parser->transform($markdown);
+    }
 }

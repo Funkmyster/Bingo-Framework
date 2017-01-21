@@ -1,9 +1,22 @@
 {
-	"require-dev": {
-		"mustache/mustache": "*"
-	},
-	"config": {
-		"prepend-autoloader": false,
-		"vendor-dir": "packages"		
-	}
+    "name": "chemem/bingo-framework",
+    "description": "A simple PHP MVC framework",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lochemem Bruno Michael",
+            "email": "lochbm@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "mustache/mustache": "*",
+		"leafo/lessphp": "*",
+        "michelf/php-markdown": "*"
+    },
+    "config" : {
+        "prepend-autoloader": false,
+        "vendor-dir": "packages",
+        "preferred-install": "dist"
+    }
 }

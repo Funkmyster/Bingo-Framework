@@ -12,7 +12,8 @@
 	
 namespace App\Controllers;
 
-use \Core\Views;	
+use \Core\Views;
+use \App\Config;
 
 class Home extends \Core\Controller
 {
@@ -29,8 +30,8 @@ class Home extends \Core\Controller
 			'js' => $view->returnURL(true, 'js') . 'controller.js',
 			'plans' => ['Reusable templates', 'MVC', 'Design simplicity'],
 			'links' => [
-				['http://localhost:8080/home/index', 'Home'], 
-				['http://localhost:8080/home/about', 'About'], 
+				['http://localhost:'. $_SERVER['SERVER_PORT'] .'/home/index', 'Home'], 
+				['http://localhost:'. $_SERVER['SERVER_PORT'] .'/home/about', 'About'], 
 				['https://github.com/ace411/Bingo-Framework', 'Documentation'], 
 				['https://github.com/ace411/Bingo-Framework', 'GitHub']
 			]
@@ -66,11 +67,48 @@ class Home extends \Core\Controller
 				motivated by the need to solve problems.
 			",
 			'links' => [
-				['http://localhost:8080/home/index', 'Home'], 
-				['http://localhost:8080/home/about', 'About'], 
+				['http://localhost:'. $_SERVER['SERVER_PORT'] .'/home/index', 'Home'], 
+				['http://localhost:'. $_SERVER['SERVER_PORT'] .'/home/about', 'About'], 
 				['https://github.com/ace411/Bingo-Framework', 'Documentation'], 
 				['https://github.com/ace411/Bingo-Framework', 'GitHub']
 			]
 		]);
 	}
+
+	public function lessAction()
+	{
+		$views = new Views;
+        $markdown = 'Markdown is **not** that _hard_. Visit my [repo][website]';
+		$values = [
+			'title' => 'LESS Actions',
+			'stylesheet' => Views::returnURL(true, 'style') . $views->autoCompileLess('main', 'main', false),
+			'font' => Views::returnURL(true, 'font') . 'Ubuntu.css',
+            'firstname' => 'Michael'
+		];
+		echo $views->mustacheRender('base', $values);		
+	}
+    
+    public function markdownAction()
+    {
+        $views = new Views;
+        $text = 'Markdown is **not** that _hard_. Visit my [repo][website]';
+        $views->render('Home/markdown.php', [
+            'title' => 'Markdown Test',
+            'header' => Views::getPath() . 'Raw/base_header.php',
+			'footer' => Views::getPath() . 'Raw/base_footer.php',
+            'markdown' => $views->transformMarkdown($text, [
+                'urls' => ['website' => 'https://www.github.com/ace411'],
+                'tab_width' => 4
+            ])
+        ]);
+    }
+    
+    public function configAction()
+    {
+        $views = new Views;
+        $config = Config::getConstants();
+        echo '<pre>';
+        var_dump($config);
+        echo '</pre>';
+    }
 }

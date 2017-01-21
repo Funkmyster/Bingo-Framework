@@ -89,10 +89,9 @@ class Router
 	public function matchRoute($url)
 	{
 		foreach ($this->routes as $route => $params) {
-			if(preg_match($route, $url, $matches)){
-			
-				foreach($matches as $key => $match){
-					if(is_string($key)){
+			if (preg_match($route, $url, $matches)) {
+				foreach ($matches as $key => $match) {
+					if(is_string($key)) {
 						$params[$key] = $match;
 					}
 				}
@@ -119,13 +118,13 @@ class Router
 	{
 		$url = $this->removeQueryString($url);
 		
-		if($this->matchRoute($url)){
+		if ($this->matchRoute($url)) {
 			//handle the controller
 			$controller = $this->params['controller'];
 			$controller = $this->convertToStudlyCaps($controller);
 			$controller = $this->addNamespace() . "{$controller}";
 
-			if(class_exists($controller)){
+			if (class_exists($controller)) {
 				//instantiate the object of the class
 				$controller_object = new $controller($this->params);
 				//handle the action
@@ -133,13 +132,13 @@ class Router
 				$action = $this->convertToCamelCase($action);
 				if(is_callable([$controller_object, $action])){
 					$method = $controller_object->$action();
-				}else {
+				} else {
 					throw new \Exception("{$method} not found in {$controller}");
 				}				
-			}else {
+			} else {
 				throw new \Exception("{$controller} not found");
 			}
-		}else {
+		} else {
 			throw new \Exception("Page content not found", 404);
 		}
 	}	
@@ -177,7 +176,7 @@ class Router
 	 *
 	 * @return string camelCase($method)
 	 * 	
-	*/	
+	 */	
 
 	protected function convertToCamelCase($method)
 	{
@@ -194,7 +193,7 @@ class Router
 
 	public function addNamespace()
 	{
-		if(array_key_exists('namespace', $this->params)){
+		if (array_key_exists('namespace', $this->params)) {
 			$this->namespace .= $this->params['namespace'] . '\\';
 		}
 
@@ -213,12 +212,12 @@ class Router
 
 	public function removeQueryString($url)
 	{
-		if(isset($url) || $url !== ' '){
+		if (isset($url) || $url !== ' ') {
 			$components = explode('&', $url);
 
-			if(!preg_match('/=+/', $components[0])){
+			if (!preg_match('/=+/', $components[0])) {
 				$url = $components[0];
-			}else {
+			} else {
 				$url = ' ';
 			}
 		}

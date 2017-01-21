@@ -21,7 +21,7 @@ class Config
 	 * 
 	 */
 
-	const DB_USER = 'bots';
+	const DB_USER = 'root';
 
 	/**
 	 *
@@ -41,7 +41,7 @@ class Config
 	 * 
 	 */
 
-	const DB_PASS = 'QW6XALwnpP6ZwNvG';
+	const DB_PASS = '';
 
 	/**
 	 *
@@ -51,7 +51,7 @@ class Config
 	 * 
 	 */
 
-	const DB_NAME = 'dproname_hiddentreasures';
+	const DB_NAME = '';
 		
 	/**
 	 *
@@ -74,4 +74,28 @@ class Config
 	 */
 
 	const DEP_ROOT = 'packages';
+	
+	/**
+	 *
+	 * Cache directory
+	 *
+	 * @var string CACHE_DIR
+	 *
+	 */
+	
+	const CACHE_DIR = 'cache';
+    
+    /**
+     *
+     * Show configuration options
+     *
+     * @return function $class->showConstants()
+     *
+     */
+    
+    public static function getConstants()
+    {
+        $class = new \ReflectionClass(__CLASS__);
+        return $class->getConstants();
+    }
 }

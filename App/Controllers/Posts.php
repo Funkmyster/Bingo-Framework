@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\Posts;
 use \Core\Views;
 
 class Posts extends \Core\Controller
@@ -21,30 +20,32 @@ class Posts extends \Core\Controller
 
 	public function indexAction()
 	{
-		$posts = new Posts();
-		$data = $posts->getPosts();
+        $data = "MySQL connections could go here...";
 		$view = new Views();
-		$view->render('Posts/index.php', [
-			'title' => 'Posts | Bingo Framework',
-			'header' => Views::getPath() . 'base_header.php',
-			'footer' => Views::getPath() . 'base_footer.php',
+		$values = [
+            'title' => 'Home | Bingo Framework',
 			'stylesheet' => Views::returnURL(true, 'style') . 'main.css',
-			'font' => $view->returnURL(true, 'font') . 'Ubuntu.css',
-			'data' => $data
-		]);	
+            'font' => Views::returnURL('true', 'font') . 'Ubuntu.css',
+            'bloc_one' => $data,
+            'firstname' => 'Chemem'
+        ];
+        echo $view->mustacheRender('base', $values);
 	}
 
 	public function addNewAction()
 	{
-		
+		$views = new Views;
+        $values = array_merge([
+            'firstname' => 'Hakeem',
+            'bloc_one' => 'Add New view'
+        ], $views->renderMustacheDefaults(true, 'Add New'));
+        echo $views->mustacheRender('base', $values);
 	}
 
 	public function editAction()
 	{
-		echo 'Hello from the edit page';
-		echo '<pre>';
-		var_dump($this->route_params);
-		echo '</pre>';
+		$views = new Views;
+        $values = $views->renderRawDefaults(true);
+        var_dump($this->route_params);
 	}
-
 }

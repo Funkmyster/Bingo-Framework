@@ -5,17 +5,15 @@ namespace App\Models;
 use \Core\Model;
 
 class Posts 
-{
-	public function getPosts()
-	{
-		$connect = Model::connectTo();
-		$connect->sqlQuery("
-			SELECT * 
-			FROM blog
-		");
-		$connect->executeQuery();
-		$posts = $connect->resultSet();
-		$posts = $connect->printJson($posts);
-		return $posts;
-	}
+{    
+    public function getAllPosts()
+    {
+        $connect = Model::connectTo();
+        $connect->sqlQuery("
+            SELECT <some data>
+            FROM <some table>
+        ");
+        $connect->executeQuery();
+        return $connect->resultSet();
+    }
 }

@@ -13,13 +13,26 @@ class ComposerStaticInitfa32a2b2325234b43fea6ac2561e6991
             array (
                 0 => __DIR__ . '/..' . '/mustache/mustache/src',
             ),
+            'Michelf' => 
+            array (
+                0 => __DIR__ . '/..' . '/michelf/php-markdown',
+            ),
         ),
+    );
+
+    public static $classMap = array (
+        'lessc' => __DIR__ . '/..' . '/leafo/lessphp/lessc.inc.php',
+        'lessc_formatter_classic' => __DIR__ . '/..' . '/leafo/lessphp/lessc.inc.php',
+        'lessc_formatter_compressed' => __DIR__ . '/..' . '/leafo/lessphp/lessc.inc.php',
+        'lessc_formatter_lessjs' => __DIR__ . '/..' . '/leafo/lessphp/lessc.inc.php',
+        'lessc_parser' => __DIR__ . '/..' . '/leafo/lessphp/lessc.inc.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixesPsr0 = ComposerStaticInitfa32a2b2325234b43fea6ac2561e6991::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitfa32a2b2325234b43fea6ac2561e6991::$classMap;
 
         }, null, ClassLoader::class);
     }
