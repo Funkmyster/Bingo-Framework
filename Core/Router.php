@@ -89,9 +89,15 @@ class Router
 	public function matchRoute($url)
 	{
 		foreach ($this->routes as $route => $params) {
+<<<<<<< HEAD
 			if (preg_match($route, $url, $matches)) {
 				foreach ($matches as $key => $match) {
 					if(is_string($key)) {
+=======
+			if (preg_match($route, $url, $matches)) {			
+				foreach ($matches as $key => $match) {
+					if (is_string($key)) {
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 						$params[$key] = $match;
 					}
 				}
@@ -117,20 +123,26 @@ class Router
 	public function dispatch($url)
 	{
 		$url = $this->removeQueryString($url);
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 		if ($this->matchRoute($url)) {
 			//handle the controller
 			$controller = $this->params['controller'];
 			$controller = $this->convertToStudlyCaps($controller);
 			$controller = $this->addNamespace() . "{$controller}";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 			if (class_exists($controller)) {
 				//instantiate the object of the class
 				$controller_object = new $controller($this->params);
 				//handle the action
 				$action = $this->params['action'];
 				$action = $this->convertToCamelCase($action);
-				if(is_callable([$controller_object, $action])){
+				if (is_callable([$controller_object, $action])) {
 					$method = $controller_object->$action();
 				} else {
 					throw new \Exception("{$method} not found in {$controller}");
@@ -214,7 +226,10 @@ class Router
 	{
 		if (isset($url) || $url !== ' ') {
 			$components = explode('&', $url);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 			if (!preg_match('/=+/', $components[0])) {
 				$url = $components[0];
 			} else {

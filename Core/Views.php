@@ -48,9 +48,15 @@ class Views
 
 		$file = $this->getPath() . $view;
 
+<<<<<<< HEAD
 		if (is_readable($file)){
 			require $file;
 		} else{
+=======
+		if (is_readable($file)) {
+			require $file;
+		} else {
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 			throw new \Exception("{$file} not found");
 		}
 	}
@@ -110,10 +116,43 @@ class Views
 	 *
 	 */
 
+<<<<<<< HEAD
 	public static function returnURL($scheme, $content)
 	{
         $views = new Views;
         switch ($content) {
+=======
+	public function setPath($scheme)
+    {
+        if (!is_bool($scheme)) {
+            throw new \Exception("{$http}: value does not exist");
+        }
+        
+        $hostPath = $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];        
+        
+        if ($scheme === true) {
+            return 'http://'. $hostPath;
+        } else {
+            return 'https://' . $hostPath;
+        }
+    }
+
+	/**
+	 *
+	 * get the URL's for the client-side dependencies
+	 *
+	 * @param bool $scheme
+	 * @param string $path
+	 *
+	 * @return string $url
+	 *
+	 */
+
+	public static function returnURL($scheme, $path)
+	{
+        $views = new Views;
+        switch ($path) {
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
             case 'font':
                 $url = $views->setPath($scheme) . '/fonts/';
                 break;
@@ -168,7 +207,11 @@ class Views
             'header' => $this->createPath('App/Views/Raw/base_header.php'),
             'footer' => $this->createPath('App/Views/Raw/base_footer.php')
         ], $this->renderMustacheDefaults($scheme, $title));        
+<<<<<<< HEAD
 	}    
+=======
+	}
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 
 	/**
  	 *
@@ -185,9 +228,13 @@ class Views
 
 	public static function sanitize($input)
 	{
-		switch($input){
+		switch ($input) {
 			case is_string($input):
+<<<<<<< HEAD
 				if (preg_match('/(?:http|https)?(?:\:\/\/)?(?:www.)?(([A-Za-z0-9-]+\.)*[A-Za-z0-9-]+\.[A-Za-z]+)(?:\/.*)?/im', $input)){
+=======
+				if (preg_match('/(?:http|https)?(?:\:\/\/)?(?:www.)?(([A-Za-z0-9-]+\.)*[A-Za-z0-9-]+\.[A-Za-z]+)(?:\/.*)?/im', $input)) {
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 					$data = filter_var($input, FILTER_SANITIZE_URL);
 				} else {
 					$data = htmlspecialchars(filter_var($input, FILTER_SANITIZE_STRING));
@@ -205,10 +252,17 @@ class Views
 	public function filter($text)
 	{
 		$sanitized = [];
+<<<<<<< HEAD
 		if (!is_array($text)){
 			throw new Exception("Please provide an array of strings");
 		} else {
 			for($x=0; $x<=count($text)-1; $x++){
+=======
+		if (!is_array($text)) {
+			throw new Exception("Please provide an array of strings");
+		} else {
+			for ($x=0; $x<=count($text)-1; $x++) {
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 				$sanitized[] = [self::sanitize($text[$x])];
 			}
 		}
@@ -234,7 +288,11 @@ class Views
 		$mustache = new \Mustache_Engine([
 			'loader' => new \Mustache_Loader_FilesystemLoader(dirname(__DIR__) . '/App/Views/Mustache', $options),
 			'cache' => $this->createPath(Config::CACHE_DIR . '/mustache'),
+<<<<<<< HEAD
 			'escape' => function ($value){
+=======
+            'escape' => function ($value){
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 				return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 			}
 		]);

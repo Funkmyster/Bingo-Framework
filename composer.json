@@ -10,6 +10,7 @@
         }
     ],
     "require-dev": {
+<<<<<<< HEAD
         "mustache/mustache": "*",
 		"leafo/lessphp": "*",
         "michelf/php-markdown": "*"
@@ -18,5 +19,12 @@
         "prepend-autoloader": false,
         "vendor-dir": "packages",
         "preferred-install": "dist"
+=======
+        "mustache/mustache": "*"
+    },
+    "config" : {
+        "prepend-autoloader": false,
+        "vendor-dir": "packages"
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
     }
 }

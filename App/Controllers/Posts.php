@@ -8,13 +8,10 @@ class Posts extends \Core\Controller
 {
 	public function articlesAction()
 	{
-		$view = new Views();
-		$values = [
-			'title' => 'Articles | Bingo Framework',
-			'stylesheet' => Views::returnURL(true, 'style') . 'main.css',
-			'font' => Views::returnURL(true, 'font') . 'Ubuntu.css',
+		$views = new Views();
+		$values = array_merge([
 			'firstname' => 'Bingo'
-		];
+		], $views->renderMustacheDefaults(true, 'Articles | Bingo Framework'));
 		echo $view->mustacheRender('base', $values);
 	}
 
@@ -32,6 +29,7 @@ class Posts extends \Core\Controller
         echo $view->mustacheRender('base', $values);
 	}
 
+<<<<<<< HEAD
 	public function addNewAction()
 	{
 		$views = new Views;
@@ -47,5 +45,14 @@ class Posts extends \Core\Controller
 		$views = new Views;
         $values = $views->renderRawDefaults(true);
         var_dump($this->route_params);
+=======
+	public function editAction()
+	{
+		$views = new Views;
+        $values = array_merge([
+            'firstname' => 'Bingo'
+        ], $views->renderMustacheDefaults(true, 'Edit | Bingo Framework'));
+        echo $view->mustacheRender('base', $values);
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 	}
 }

@@ -74,14 +74,22 @@ class Config
 	 */
 
 	const DEP_ROOT = 'packages';
+<<<<<<< HEAD
 	
 	/**
 	 *
 	 * Cache directory
+=======
+    
+    /**
+	 *
+	 * Cache directory for
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 	 *
 	 * @var string CACHE_DIR
 	 *
 	 */
+<<<<<<< HEAD
 	
 	const CACHE_DIR = 'cache';
     
@@ -99,3 +107,22 @@ class Config
         return $class->getConstants();
     }
 }
+=======
+    
+    const CACHE_DIR = 'cache';
+    
+    /**
+     *
+     * Method to return all the Configuration options
+     *
+     * @return $reflectionClass->getConstants() 
+     *
+     */
+    
+    public function getConstants()
+    {
+        $reflectionClass = new ReflectionClass(__CLASS__);
+        return $reflectionClass->getConstants();
+    }
+}
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af

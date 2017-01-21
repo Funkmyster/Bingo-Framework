@@ -50,11 +50,15 @@ abstract class Controller
 		$method = $name . 'Action';
 
 		if (method_exists($this, $method)) {
+<<<<<<< HEAD
 			if ($this->before() !== false) {
+=======
+			if($this->before() !== false){
+>>>>>>> 6ac250949257f9a54f6f657de894877db11241af
 				call_user_func_array([$this, $method], $args);
 				$this->after();
 			}
-		}else{
+		} else{
 			throw new \Exception("View {$method} not found in controller " . get_class($this));
 		}
 	}
